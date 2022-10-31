@@ -23,7 +23,7 @@ public class RelativeStrengthIndicator {
                     results[index] = HUNDRED;
                 }
             } else {
-                BigDecimal relativeStrength = averageGain.divide(averageLoss, 2, RoundingMode.HALF_UP);
+                BigDecimal relativeStrength = averageGain.divide(averageLoss, 4, RoundingMode.HALF_UP);
                 // compute relative strength index
                 results[index] = HUNDRED.subtract((HUNDRED.divide((BigDecimal.ONE.add(relativeStrength)), 2, RoundingMode.HALF_UP)));
             }

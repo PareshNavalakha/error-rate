@@ -14,24 +14,18 @@ public class ExponentialMovingAverage {
 
         BigDecimal smoothingConstant = BigDecimal.valueOf(2).divide(BigDecimal.valueOf(period + 1), 2, RoundingMode.HALF_UP);
 
-        BigDecimal[] periodSma = new BigDecimal[values.length];
-
-        for (int index = 0; index < (period - 1); index++) {
+        for (int index = 0; index < period; index++) {
             results[index] = BigDecimal.ZERO;
         }
 
-        BigDecimal[] smaResults = SimpleMovingAverage.of(values, period - 1);
+        BigDecimal[] simpleMovingAverage = SimpleMovingAverage.of(values, period - 1);
 
-        for (int index = (period - 1); index < values.length; index++) {
-
-            periodSma[index] = smaResults[index - 1];
-
-            if (index == (period - 1)) {
-                results[index] = periodSma[index];
-            } else if (index > (period - 1)) {
-                // Formula: (Close - EMA(previous day)) x multiplier +
-                // EMA(previous day)
-                results[index] = values[index].subtract(results[index - 1]).multiply(smoothingConstant).add(results[index - 1]);
+        for (int index = period; index < values.length; index++) {
+            if (index == period) {
+                results[index] = simpleMovingAverage[index];
+            } else {
+                // Formula: (Close - EMA(previous day)) x multiplier + EMA(previous day)
+                results[index] = (values[index].subtract(results[index - 1])).multiply(smoothingConstant).add(results[index - 1]);
             }
         }
 

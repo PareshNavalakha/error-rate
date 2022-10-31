@@ -16,14 +16,16 @@ public class SimpleMovingAverage {
 
         results = new BigDecimal[values.length];
 
-        int maxLength = values.length - period;
-
         for (int index = 0; index < period; index++) {
             results[index] = BigDecimal.ZERO;
         }
 
-        for (int index = 0; index < maxLength; index++) {
-            results[index + period] = NumberUtil.average(values, RoundingMode.HALF_UP, index, period);
+        for (int index = period; index < values.length; index++) {
+            if (index == period) {
+                results[index] = NumberUtil.average(values, RoundingMode.HALF_UP, index - period, period);
+            } else {
+                results[index] = ((results[index - 1].multiply(BigDecimal.valueOf((period - 1)))).add(values[index])).divide(BigDecimal.valueOf(period), 2, RoundingMode.HALF_UP);
+            }
         }
 
         return results;
